@@ -1,0 +1,32 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+    <h1>Database table</h1>
+    <p><a href="/">Back to homepage.</a></p>
+    <div class = "tickets">
+        <table style="width:100%">
+            <tr>
+                <th>Code</th>
+                <th>Bug</th>
+                <th>Created</th>
+                <th>Assignee</th>
+                <th>Due</th>
+                <th>Status</th>
+                <th>Severity</th>
+                <th>Action</th>
+            </tr>
+        {% for entry in data1 %}
+            <tr>
+                <th>{{entry.code}}</th>
+                <th>{{entry.bug}}</th>
+                <th>{{entry.created}}</th>
+                <th>{{entry.assignee}}</th>
+                <th>{{entry.due}}</th>
+                <th>{{entry.status}}</th>
+                <th>{{entry.severity}}</th>
+<!--                <th><input type="button" value="Delete"></th>-->
+                <th><a href="/delete/{{entry.id}}/">Delete</a></th>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endblock %}
