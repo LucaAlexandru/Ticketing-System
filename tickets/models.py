@@ -1,4 +1,5 @@
 from django.db import models
+from tickets.constants import STATUS_CHOICES
 
 
 class Ticket(models.Model):
@@ -8,7 +9,7 @@ class Ticket(models.Model):
     assignee = models.CharField(max_length=50)
     due = models.DateField(null=True)
     status = models.CharField(max_length=20)
-    severity = models.CharField(max_length=20)
+    severity = models.CharField(max_length=20, choices=STATUS_CHOICES, default="major")
 
     def __str__(self):
         return self.code

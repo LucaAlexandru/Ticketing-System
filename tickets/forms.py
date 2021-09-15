@@ -8,7 +8,7 @@
 #         fields = ["code", "bug", "created", "assignee", "due", "status", "severity"]
 
 from django import forms
-
+from tickets.constants import STATUS_CHOICES
 
 class TicketForm(forms.Form):
     new_code = forms.CharField(label='code', max_length=100)
@@ -17,4 +17,4 @@ class TicketForm(forms.Form):
     new_assignee = forms.CharField(label='assignee', max_length=100)
     new_due = forms.DateField(label='due')
     new_status = forms.CharField(label='status', max_length=100)
-    new_severity = forms.CharField(label='severity', max_length=100)
+    new_severity = forms.ChoiceField(label='severity', choices=STATUS_CHOICES)

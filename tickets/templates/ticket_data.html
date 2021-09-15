@@ -12,7 +12,8 @@
                 <th>Due</th>
                 <th>Status</th>
                 <th>Severity</th>
-                <th>Action</th>
+                <th>Action1</th>
+                <th>Action2</th>
             </tr>
         {% for entry in data1 %}
             <tr>
@@ -22,9 +23,16 @@
                 <th>{{entry.assignee}}</th>
                 <th>{{entry.due}}</th>
                 <th>{{entry.status}}</th>
-                <th>{{entry.severity}}</th>
+                <th>{{entry.get_severity_display}}</th>
 <!--                <th><input type="button" value="Delete"></th>-->
                 <th><a href="/delete/{{entry.id}}/">Delete</a></th>
+                <th><a href="/change_status/{{entry.id}}/">
+                    {% if entry.status == "Closed" %}
+                        Open
+                    {% elif entry.status == "Open" %}
+                        Close
+                    {% endif %}
+                </a></th>
             </tr>
         {% endfor %}
         </table>

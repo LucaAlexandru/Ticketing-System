@@ -86,12 +86,24 @@ def find_in_database(request):
     return TemplateResponse(request, "index.html", {})
 
 def delete(request, ticket_id):
-        emp = Ticket.objects.get(pk=ticket_id)
-        if emp.severity != "Major":
-            emp.delete()
-        else:
-            messages.error(request, 'Can\'t delete tickets with Major severity.')
-        return redirect("database_view")
+    emp = Ticket.objects.get(pk=ticket_id)
+    if emp.severity != "Major":
+        emp.delete()
+    else:
+        messages.error(request, 'Can\'t delete tickets with Major severity.')
+    return redirect("database_view")
+
+def change_status(request, ticket_id):
+    emp = Ticket.objects.get(pk=ticket_id)
+    if emp.status == "Closed":
+        emp.status = "Open"
+        emp.save()
+    elif emp.status == "Open":
+        emp.status = "Closed"
+        emp.save()
+    else:
+        messages.error(request, 'Can\'t change status other than for open/closed tickets.')
+    return redirect("database_view")
 
 def change_all_entries(request):
     all_tickets = Ticket.objects.all()
