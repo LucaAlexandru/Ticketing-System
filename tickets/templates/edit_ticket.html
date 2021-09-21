@@ -1,11 +1,11 @@
 {% extends 'base_layout.html' %}
 {% block content %}
-    <h1>Database table</h1>
+    <h1>Database entry</h1>
     <p><a href="/">Back to homepage.</a></p>
-    <p>Add new entry:</p>
-    <form action="/add_to_database/" method="post">
+    <p>Edit entry:</p>
+    <form action="" method="post">
         {% csrf_token %}
-        {{ ticket_form.as_p }}
+        {{ edit_form.as_p }}
         <p>Submit new database entry:</p><input type="submit" value="Submit ticket">
     </form>
 {% endblock %}

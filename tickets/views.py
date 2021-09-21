@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from tickets.models import Ticket
 from django.http import HttpResponseRedirect
-from tickets.forms import TicketForm
+from tickets.forms import TicketForm, EditTicketForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
 
 
 def homepage(request):
@@ -33,6 +35,7 @@ def view_ticket_details(request, ticket_id):
     return TemplateResponse(request, "index.html")
 
 
+@login_required(login_url="/accounts/login/")
 def add_to_database(request):
     if request.method == 'POST':
         form = TicketForm(request.POST)
@@ -50,7 +53,8 @@ def add_to_database(request):
                                 due=cleaned_due, status=cleaned_status,
                                 severity=cleaned_severity)
             new_ticket.save()
-            return HttpResponseRedirect('thanks')
+            # return HttpResponseRedirect('thanks')
+            return redirect("database_view")
         else:
             return HttpResponseRedirect('not valid')
     else:
@@ -58,20 +62,32 @@ def add_to_database(request):
     return render(request, 'add_to_database.html', {'ticket_form': form})
 
 
+def edit_ticket(request, ticket_id):
+    print(request.user)
+    ticket = Ticket.objects.get(id=ticket_id)
+    if ticket.user != request.user:
+        return redirect("database_view")
+    if request.method == 'POST':
+        form = EditTicketForm(request.POST, instance=ticket)
+        if form.is_valid():
+            form.save()
+            return redirect("database_view")
+        else:
+            return HttpResponseRedirect('not valid')
+    else:
+        form = EditTicketForm(instance=ticket)
+    return render(request, 'edit_ticket.html', {'edit_form':form})
+
+
 def edit_in_database(request):
     ticket = Ticket.objects.get(id=1)
-    print("AAAAAAAAAAAAAAA")
-    print("AAAAAAAAAAAAAAA")
     ticket = Ticket.objects.all().first()
-    print(ticket.assignee)
     ticket.assignee = "Tudor"
-    print(ticket.assignee)
     ticket.save()
     return TemplateResponse(request, "index.html", {})
 
 
 def find_in_database(request):
-    # case1
     all_tickets = Ticket.objects.all()
     found_ticket = None
     for a_ticket in all_tickets:
@@ -79,11 +95,8 @@ def find_in_database(request):
             found_ticket = a_ticket
             break
     print(found_ticket.assignee)
-
-    # case2
-    # someticket = Ticket.objects.get(assignee='Bob') # will fail if you have 2 tickets or more assigned to this individual
-    # print(someticket.assignee)
     return TemplateResponse(request, "index.html", {})
+
 
 def delete(request, ticket_id):
     emp = Ticket.objects.get(pk=ticket_id)
@@ -92,6 +105,7 @@ def delete(request, ticket_id):
     else:
         messages.error(request, 'Can\'t delete tickets with Major severity.')
     return redirect("database_view")
+
 
 def change_status(request, ticket_id):
     emp = Ticket.objects.get(pk=ticket_id)
@@ -105,9 +119,9 @@ def change_status(request, ticket_id):
         messages.error(request, 'Can\'t change status other than for open/closed tickets.')
     return redirect("database_view")
 
+
 def change_all_entries(request):
     all_tickets = Ticket.objects.all()
-
     name_seed = "a"
     for a_ticket in all_tickets:
         a_ticket.code = name_seed

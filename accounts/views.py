@@ -4,7 +4,6 @@ from django.contrib.auth import login, logout
 from django.template.response import TemplateResponse
 
 
-
 # Create your views here.
 def signup_view(request):
     if request.method == 'POST':
@@ -25,7 +24,11 @@ def login_view(request):
             # log in the user
             user = form.get_user()
             login(request, user)
-            return redirect('homepage')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            # 'next' value is from login.html
+            else:
+                return redirect('homepage')
     else:
         form = AuthenticationForm()
     return render(request, 'accounts/login.html', {'login_form':form})

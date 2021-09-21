@@ -9,6 +9,7 @@
 
 from django import forms
 from tickets.constants import STATUS_CHOICES
+from tickets.models import Ticket
 
 class TicketForm(forms.Form):
     new_code = forms.CharField(label='code', max_length=100)
@@ -18,3 +19,8 @@ class TicketForm(forms.Form):
     new_due = forms.DateField(label='due')
     new_status = forms.CharField(label='status', max_length=100)
     new_severity = forms.ChoiceField(label='severity', choices=STATUS_CHOICES)
+
+class EditTicketForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = '__all__'

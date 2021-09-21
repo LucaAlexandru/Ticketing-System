@@ -30,5 +30,6 @@ urlpatterns = [
     path('view_databasetwo/', views.view_databasetwo),
     path('<int:ticket_id>/', views.view_ticket_details),
     path('delete/<int:ticket_id>/', views.delete),
-    path('change_status/<int:ticket_id>/', views.change_status)
+    path('change_status/<int:ticket_id>/', views.change_status),
+    path('edit/<int:ticket_id>/', views.edit_ticket, name="edit_ticket"),
 ]

@@ -17,14 +17,13 @@
             </tr>
         {% for entry in data1 %}
             <tr>
-                <th>{{entry.code}}</th>
+                <th><a href="/edit/{{entry.id}}/">{{entry.code}}</a></th>
                 <th>{{entry.bug}}</th>
                 <th>{{entry.created}}</th>
                 <th>{{entry.assignee}}</th>
                 <th>{{entry.due}}</th>
                 <th>{{entry.status}}</th>
                 <th>{{entry.get_severity_display}}</th>
-<!--                <th><input type="button" value="Delete"></th>-->
                 <th><a href="/delete/{{entry.id}}/">Delete</a></th>
                 <th><a href="/change_status/{{entry.id}}/">
                     {% if entry.status == "Closed" %}
