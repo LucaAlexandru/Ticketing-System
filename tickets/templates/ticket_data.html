@@ -18,7 +18,7 @@
         {% for entry in data1 %}
             <tr>
                 <th><a href="/edit/{{entry.id}}/">{{entry.code}}</a></th>
-                <th>{{entry.bug}}</th>
+                <th><a href="/comments/{{entry.id}}/">{{entry.bug}}</a></th>
                 <th>{{entry.created}}</th>
                 <th>{{entry.assignee}}</th>
                 <th>{{entry.due}}</th>

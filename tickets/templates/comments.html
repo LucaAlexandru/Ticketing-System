@@ -1,0 +1,16 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+    <h1>Database table</h1>
+    <p><a href="/">Back to homepage.</a></p>
+    <p>Comments:</p>
+    {{ ticket_test.assignee }}
+    {{ ticket_test.status }}
+    {{ ticket_test.due }}
+    {% for comment in comments %}
+        <div>
+            {{ comment.name }}
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

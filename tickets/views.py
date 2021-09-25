@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
-from tickets.models import Ticket
+from tickets.models import Ticket, Comments
 from django.http import HttpResponseRedirect
 from tickets.forms import TicketForm, EditTicketForm
 from django.contrib import messages
@@ -35,6 +35,12 @@ def view_ticket_details(request, ticket_id):
     return TemplateResponse(request, "index.html")
 
 
+def show_comment(request, ticket_id):
+    retrieved_ticket = Ticket.objects.get(pk=ticket_id)
+    comments = Comments.objects.filter(ticket=retrieved_ticket)
+    return render(request, 'comments.html', {"ticket_test": retrieved_ticket, 'comments': comments})
+
+
 @login_required(login_url="/accounts/login/")
 def add_to_database(request):
     if request.method == 'POST':
@@ -63,10 +69,13 @@ def add_to_database(request):
 
 
 def edit_ticket(request, ticket_id):
+    print("request.user is: ")
     print(request.user)
     ticket = Ticket.objects.get(id=ticket_id)
-    if ticket.user != request.user:
-        return redirect("database_view")
+    print("Ticket.objects.get(id=ticket_id) is: ")
+    print(Ticket.objects.get(id=ticket_id).assignee)
+    # if ticket.user != request.user:
+    #     return redirect("database_view")
     if request.method == 'POST':
         form = EditTicketForm(request.POST, instance=ticket)
         if form.is_valid():
